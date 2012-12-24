@@ -1,0 +1,18 @@
+<% left=5 %>
+<% right=46 %>
+<% top=2 %>
+<% bottom=20 %>
+<% delta=1.2 %>
+<% height=1 %>
+
+<% model_name.attribute_names.each do |attribute_name| %>
+
+var myTextFrame = app.activeDocument.pages.item(0).textFrames.add()
+myTextFrame.name = '<%="#{model_name}.#{attribute_name}"%>'
+myTextFrame.geometricBounds = [ <%= top += delta %>,<%= left %>, <%= top + height %>, <%= right %>];
+myTextFrame.contents = '<%="This is your TexFrame for #{attribute_name} from the db table #{model_name.to_s.tableize}."%>';
+<% end %>
+
+
+
+

@@ -1,0 +1,12 @@
+<%% include ActionView::Helpers::JavaScriptHelper %>
+<%% model.each do |<%= model_name.to_s.tableize.singularize %>| %>
+
+<% model_name.attribute_names.each do |attribute_name| %>
+app.activeDocument.textFrames.item('<%="#{model_name}.#{attribute_name}"%>').contents= '<%%= <%=" escape_javascript #{model_name.to_s.tableize.singularize}.#{attribute_name}"%>.to_s %>';
+<% end %>
+<%%
+file_path = File.expand_path("~/Desktop/<%= model_name.to_s.tableize %>/#{<%= model_name.to_s.tableize.singularize %>.id}.pdf")
+FileUtils.mkdir_p File.dirname(file_path)
+%>
+app.activeDocument.exportFile(ExportFormat.pdfType, File("<%%= file_path %>"), false);
+<%% end %>
