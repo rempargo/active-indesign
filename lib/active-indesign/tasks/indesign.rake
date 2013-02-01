@@ -51,12 +51,13 @@ namespace :indesign do
     desc 'Create indesign .js script to iterate over your recods, and for each record update the field, and export a pdf'
     task :iterator, [:Model] => [:environment] do |cmd,args|
       model_name = args[:Model].constantize
-      iterator_erb_file_path = "#{erb_directory}/#{model_name.to_s.tableize}_iterator.js.erb"
+      iterator_erb_file_path = "#{erb_directory}/#{model_name.to_s.underscore}_iterator.js.erb"
       unless File.exists?(iterator_erb_file_path)
         puts "#{iterator_erb_file_path} does not exist, first create it with:\n\nrake indesign:erb:scaffold[#{args[:Model]}]\n"
       else
 
-        model = model_name.find :all, :limit => 10
+        model = model_name.find :all, :order => :product_id,:conditions =>{:orientation=>'L',:baseplate_width_quantity=>1,:baseplate_height_quantity=>1}
+#        model = model_name.find_by_product_id 801001
         iterator_script = ERB.new(File.read(iterator_erb_file_path)).result(binding)
 
         iterator_script_file_path = File.expand_path "#{indesign_script_directory}/iterator_for_model_#{model_name.to_s.underscore}.js"
